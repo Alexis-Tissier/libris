@@ -1,0 +1,59 @@
+# Node / frontend
+node_modules/
+dist/
+.vite/
+
+# Rust / Tauri
+src-tauri/target/
+target/
+
+# Local application data — never commit a user's library
+*.sqlite
+*.sqlite3
+*.db
+*.db-wal
+*.db-shm
+*.sqlite-wal
+*.sqlite-shm
+*.bak
+*.backup
+backups/
+exports/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Generated installers and archives
+*.rpm
+*.deb
+*.AppImage
+*.msi
+*.dmg
+*.zip
+*.tar
+*.tar.gz
+
+# Local update/work directories
+.update-backups/
+.tmp/
+tmp/
+
+# IDE / OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*

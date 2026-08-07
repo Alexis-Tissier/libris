@@ -1,0 +1,26 @@
+[package]
+name = "libris-desktop"
+version = "0.5.0"
+description = "Bibliothèque personnelle locale pour livres physiques"
+authors = ["Libris contributors"]
+edition = "2021"
+
+[lib]
+name = "libris_desktop_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-dialog = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+rusqlite = { version = "0.32", features = ["bundled"] }
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
+dirs = "5"
+chrono = { version = "0.4", features = ["serde"] }
+urlencoding = "2"
+base64 = "0.22"
