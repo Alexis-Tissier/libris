@@ -1,0 +1,15 @@
+.git
+.github
+node_modules
+dist
+src-tauri/target
+server/target
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.db
+*.log
+.env
+.env.*
+backups
+runtime-data
