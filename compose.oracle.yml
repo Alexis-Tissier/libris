@@ -1,0 +1,23 @@
+services:
+  libris:
+    build:
+      context: .
+      dockerfile: Dockerfile.oracle
+    container_name: libris
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8030:8030"
+    environment:
+      LIBRIS_BIND: 0.0.0.0:8030
+      LIBRIS_DIST_DIR: /app/dist
+      XDG_DATA_HOME: /data
+    volumes:
+      - type: bind
+        source: /opt/apps/libris-data
+        target: /data
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8030/api/health"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
