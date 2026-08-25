@@ -35,7 +35,7 @@ jobs:
 
       - name: Desktop Rust checks
         working-directory: src-tauri
-        run: cargo check --locked
+        run: cargo check
 
       - name: Web server Rust checks
         working-directory: server
