@@ -20,7 +20,9 @@ jobs:
 
       - uses: swatinem/rust-cache@v2
         with:
-          workspaces: './src-tauri -> target'
+          workspaces: |
+            ./src-tauri -> target
+            ./server -> target
 
       - name: Install Linux dependencies
         run: |
@@ -29,7 +31,12 @@ jobs:
 
       - run: npm ci
       - run: npm run check
+      - run: npm run build
 
-      - name: Rust checks
+      - name: Desktop Rust checks
         working-directory: src-tauri
         run: cargo check --locked
+
+      - name: Web server Rust checks
+        working-directory: server
+        run: cargo check
