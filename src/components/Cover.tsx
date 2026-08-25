@@ -28,7 +28,10 @@ export function Cover({
 }: CoverProps) {
   const hostRef = useRef<HTMLDivElement>(null);
   const localSource = useMemo(() => {
-    if (!src) return "";
+    // An absolute cover_path belongs to the desktop machine. Never expose or
+    // attempt to resolve it from the browser; the web server can recover a
+    // remote cover from the stored URL/ISBN/source metadata instead.
+    if (api.runtime !== "desktop" || !src) return "";
     if (src.startsWith("/") || /^[A-Za-z]:\\/.test(src)) {
       try { return convertFileSrc(src); } catch { return src; }
     }
