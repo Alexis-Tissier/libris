@@ -61,7 +61,7 @@ fi
 cd "$REMOTE_APP"
 sudo docker compose -f compose.oracle.yml stop libris
 sudo mkdir -p "$(dirname "$REMOTE_DATA")"
-sudo install -m 0644 "$SOURCE" "$REMOTE_DATA"
+sudo install -o root -g root -m 0644 "$SOURCE" "$REMOTE_DATA"
 sudo rm -f "${REMOTE_DATA}-wal" "${REMOTE_DATA}-shm"
 rm -f "$SOURCE"
 
@@ -75,16 +75,22 @@ done
 curl -fsS http://127.0.0.1:8030/api/health
 echo
 
-python3 - "$REMOTE_DATA" <<'PY'
+# Le serveur utilise SQLite en WAL. Une lecture depuis l'hôte peut devoir
+# accéder/créer le fichier -shm ; on vérifie donc avec les mêmes droits root
+# que le conteneur plutôt qu'avec l'utilisateur SSH non privilégié.
+sudo python3 - "$REMOTE_DATA" <<'PY'
 import sqlite3
 import sys
 path = sys.argv[1]
-conn = sqlite3.connect(f"file:{path}?mode=ro", uri=True)
-print("integrity=", conn.execute("PRAGMA integrity_check").fetchone()[0])
+conn = sqlite3.connect(path)
+check = conn.execute("PRAGMA integrity_check").fetchone()[0]
+print("integrity=", check)
 print("books=", conn.execute("SELECT COUNT(*) FROM books").fetchone()[0])
 print("reading=", conn.execute("SELECT COUNT(*) FROM books WHERE status='reading'").fetchone()[0])
 print("read=", conn.execute("SELECT COUNT(*) FROM books WHERE status='read'").fetchone()[0])
 conn.close()
+if check != "ok":
+    raise SystemExit("Base Oracle invalide après migration")
 PY
 
 echo "REMOTE_BACKUP=$BACKUP_DIR"
